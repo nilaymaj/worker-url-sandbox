@@ -1,27 +1,23 @@
 # WebWorker example
 
-This example shows how to run code in WebWorkers by utilizing [webpack 5](https://nextjs.org/docs/messages/webpack5).
+This repository is a minimal reproduction of how defining the worker URL as a separate variable breaks the worker initialization. The code is based off the `with-web-worker` example provided by Next.js, with modifications done only in the manner the worker is created.
 
-## Preview
+There are only three little files to look at:
 
-Preview the example live on [StackBlitz](http://stackblitz.com/):
+- `utils/pi.js`: contains a single function to calculate an approximation of pi
+- `worker.js`: contains a web worker that processes the `pi` function above
+- `pages/index.js`: a React component that initializes the worker. This is the main file of concern.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-web-worker)
+To check this out:
 
-## Deploy your own
+1. Launch the development server with the below instructions
+2. In your code editor, open the file `pages/index.ts`
+3. Look at the lines 8-12. Toggle the cases to see the effect.
 
-Deploy the example using [Vercel](https://vercel.com/):
+- In case I, the url is defined as a separate variable and then passed in the Worker initialization. Gives the error `SyntaxError: import declarations may only appear at top level of a module`.
+- In case II, the url is created directly inside the Worker initialization's arguments. Works fine.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-web-worker&project-name=with-web-worker&repository-name=with-web-worker)
+## How to run?
 
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-web-worker with-web-worker-app
-# or
-yarn create next-app --example with-web-worker with-web-worker-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+1. Install dependencies: `yarn`
+2. Run the development server: `yarn dev`
