@@ -1,24 +1,29 @@
-import { useEffect, useRef, useCallback } from 'react'
+import React from "react";
 
 export default function Index() {
-  const workerRef = useRef()
-  useEffect(() => {
-    workerRef.current = new Worker(new URL('../worker.js', import.meta.url))
-    workerRef.current.onmessage = (evt) =>
-      alert(`WebWorker Response => ${evt.data}`)
-    return () => {
-      workerRef.current.terminate()
-    }
-  }, [])
+  const workerRef = React.useRef();
 
-  const handleWork = useCallback(async () => {
-    workerRef.current.postMessage(100000)
-  }, [])
+  React.useEffect(() => {
+    // CASE I: SEPARATE URL (doesn't work)
+    const url = new URL("../worker.js", import.meta.url);
+    workerRef.current = new Worker(url);
+    // CASE II: ALL IN ONE LINE (works)
+    // workerRef.current = new Worker(new URL("../worker.js", import.meta.url));
+    workerRef.current.onmessage = (evt) =>
+      alert(`WebWorker Response => ${evt.data}`);
+    return () => {
+      workerRef.current.terminate();
+    };
+  }, []);
+
+  const handleWork = React.useCallback(async () => {
+    workerRef.current.postMessage(100000);
+  }, []);
 
   return (
     <div>
       <p>Do work in a WebWorker!</p>
       <button onClick={handleWork}>Calculate PI</button>
     </div>
-  )
+  );
 }
